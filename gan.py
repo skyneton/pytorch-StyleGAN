@@ -1,5 +1,4 @@
 import os, torch, time, cv2
-from threading import Thread
 from PIL import Image
 from torch.autograd.variable import Variable
 from torch.serialization import load
@@ -163,7 +162,7 @@ def output(path, name="finish.png"):
         save_image(output_image * 0.5 + 0.5, os.path.join("./output", name))
 
 def training():
-    loader = data_load("./data", "webtoon")
+    loader = data_load("./data", "train")
     
     BCE_loss = nn.BCELoss().to(Setting["DEVICE"])
 
