@@ -138,22 +138,10 @@ D = Discriminator().to(Setting["DEVICE"])
 G.apply(initialize_weights)
 D.apply(initialize_weights)
 
-def output(name="finish.png"):
-    # z = torch.randn(64, LATENT_SIZE, 1, 1, device=DEVICE)
-    # with torch.no_grad():
-    #     G.eval()
-    #     sample_images = G(z)
-    #     save_image(sample_images * 0.5 + 0.5, os.path.join("./", "test.png"))
-    
-    
-    # input_image = Image.open("./webtoons/1/1629334927757-0.jpg").convert("RGB")
-    # input_image = Image.open("./webtoons/0/1629296924396-70.jpg").convert("RGB")
-    # input_image = Image.open("./test.png").convert("RGB")
-    # input_image = Image.open("./black.jpg").convert("RGB")
-    input_image = Image.open("./KakaoTalk_20210829_131627319.png").convert("RGB")
+def output(path, name="finish.png"):
+    input_image = Image.open(path).convert("RGB")
     input_image = np.asarray(input_image)
     input_image2 = input_image[:,:,[2,1,0]]
-    # input_image = np.array([input_image, input_image2])
 
     # input_image = transforms.ToTensor()(input_image).unsqueeze(0)
     input_image = transforms.ToTensor()(input_image)
@@ -229,7 +217,6 @@ def training():
             G_optimizer.step()
 
             if i % 50 == 0:
-                output("{}-{}.png".format(epoch, i))
                 print("[{}/{}] [{}/{}] - time: {:.2f}, Loss: {:.3f}, D(x): {:.5f}, D(G(x)): {:.5f}/{:.5f}".format(epoch, Setting["EPOCHS"], i, len(loader), time.time() - start_loop, Disc_loss.item(), G_loss.item(), D_x, D_G_fake, D_G_fake2))
             # print("[{}/{}] [{}/{}] - time: {:.2f}, Disc Loss: {:.3f}, G Loss: {:.3f}, D(x): {:.5f}, D(G(x)): {:.5f}".format(epoch + 1, Setting["EPOCHS"], i + 1, len(loader), time.time() - start_loop, Disc_loss.item(), G_loss.item(), D_real_loss.item(), D_fake_loss.item()))
           
@@ -289,6 +276,12 @@ def video(name="result.avi"):
 if __name__ == "__main__":
     print("Using Device:", Setting["DEVICE"])
     if os.path.exists("./model/Generator.pt"): load()
-    training()
-    output()
+    # training()
+    # output()
+
+    target = "./input"
+    for f in os.listdir(target):
+        if os.path.isfile(os.path.join(target, f)):
+            output(os.path.join(target, f), f)
+    
     video()
