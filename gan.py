@@ -1,4 +1,4 @@
-Modified by CartoonGAN and DCGAN
+# Modified by CartoonGAN and DCGAN
 import os, torch, time, cv2
 from PIL import Image
 from torch.autograd.variable import Variable
